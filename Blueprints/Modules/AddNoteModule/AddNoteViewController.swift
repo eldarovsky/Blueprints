@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class AddNoteViewController: UIViewController {
     
@@ -14,7 +15,6 @@ final class AddNoteViewController: UIViewController {
     let textView = UITextView()
     var note: Note?
     weak var addNoteViewControllerCoordinator: AddNoteViewControllerCoordinator?
-    
     
     // MARK: - Lifecycle methods
     
@@ -41,9 +41,7 @@ final class AddNoteViewController: UIViewController {
             StorageManager.shared.create(title: title, text: fullText)
         }
     }
-    
-    
-    
+
     /// Метод настройки view
     private func setupUI() {
         
@@ -74,12 +72,11 @@ final class AddNoteViewController: UIViewController {
     
     ///Метод установки констрейнтов
     private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            textView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+        textView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.left.equalToSuperview().offset(8)
+            make.right.equalToSuperview().offset(-8)
+        }
     }
     
     private func setColor() {

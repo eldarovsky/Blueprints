@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SnapKit
 
-// MARK: - Notes ViewController
+// MARK: - Notes ViewController Protocol
 
 protocol NotesViewControllerProtocol: AnyObject {
     func reloadData()
@@ -16,12 +17,17 @@ protocol NotesViewControllerProtocol: AnyObject {
     func showAddNoteView()
 }
 
+// MARK: - Notes ViewController
+
 final class NotesViewController: UIViewController {
     
-    // MARK: - Private properties
+    // MARK: - Public properties
+
     weak var notesViewControllerCoordinator: NotesViewControllerCoordinator?
     var presenter: NotesPresenterProtocol?
     
+    // MARK: - Private properties
+
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let footerView = UIView()
     private let notesCounterLabel = UILabel()
@@ -41,7 +47,7 @@ final class NotesViewController: UIViewController {
     }
 }
 
-// MARK: - Notes ViewController extension
+// MARK: - Private methods
 
 private extension NotesViewController {
     func setupView() {
@@ -58,9 +64,7 @@ private extension NotesViewController {
 }
 
 private extension NotesViewController {
-    
-    // MARK: - Private methods
-    
+
     /// addSubviews method
     func addSubviews() {
         view.addSubviews(
@@ -82,28 +86,28 @@ private extension NotesViewController {
     }
     
     /// setConstraints method
-    private func setConstraints() {
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+    func setConstraints() {
+        tableView.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
 
-            footerView.heightAnchor.constraint(equalToConstant: 70),
-            footerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            footerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            footerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            notesCounterLabel.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
-            notesCounterLabel.centerYAnchor.constraint(equalTo: footerView.topAnchor, constant: 20),
+        footerView.snp.makeConstraints { make in
+            make.height.equalTo(70)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
 
-            addNoteButton.heightAnchor.constraint(equalToConstant: 40),
-            addNoteButton.widthAnchor.constraint(equalToConstant: 40),
-            addNoteButton.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -30),
-            addNoteButton.centerYAnchor.constraint(equalTo: footerView.topAnchor, constant: 20)
-        ])
+        notesCounterLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(footerView.snp.centerX)
+            make.centerY.equalTo(footerView.snp.top).offset(20)
+        }
+
+        addNoteButton.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.centerY.equalTo(footerView.snp.top).offset(20)
+            make.trailing.equalTo(footerView.snp.trailing).offset(-30)
+        }
     }
-    
+
     /// setupTableView method
     func setupTableView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -112,7 +116,7 @@ private extension NotesViewController {
     }
     
     /// setupNavigationBar method
-    private func setupNavigationBar() {
+    func setupNavigationBar() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         
@@ -132,7 +136,7 @@ private extension NotesViewController {
     }
     
     /// setupUI method
-    private func setupUI() {
+    func setupUI() {
         tableView.backgroundColor = .systemGray6
         footerView.backgroundColor = .systemGray6
 
@@ -145,23 +149,17 @@ private extension NotesViewController {
     }
     
     /// addActions method
-    private func addActions() {
+    func addActions() {
         addNoteButton.addTarget(self, action: #selector(showAddNoteVC), for: .touchUpInside)
     }
-    
-    
-    
-    
-    
-    
-    
+
     /// showAddNote VC method
     @objc private func showAddNoteVC() {
         notesViewControllerCoordinator?.runAddNotes()
     }
     
     /// Date to string method
-    private func dateToString(format: String, date: Date?) -> String? {
+    func dateToString(format: String, date: Date?) -> String? {
         guard let date = date else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = format
@@ -171,7 +169,7 @@ private extension NotesViewController {
     }
     
     /// Get Image method
-    private func getImage(from date: Date?) -> String {
+    func getImage(from date: Date?) -> String {
         if let noteDate = date {
             let hour = Calendar.current.component(.hour, from: noteDate)
             switch hour {
@@ -198,7 +196,7 @@ private extension NotesViewController {
     }
 }
 
-// MARK: - UITableView DataSource
+// MARK: - TableView DataSource
 
 extension NotesViewController: UITableViewDataSource {
     
@@ -236,7 +234,7 @@ extension NotesViewController: UITableViewDataSource {
     }
 }
 
-// MARK: TableView Delegate
+// MARK: - TableView Delegate
 
 extension NotesViewController: UITableViewDelegate {
     
@@ -266,6 +264,8 @@ extension NotesViewController: UITableViewDelegate {
         70
     }
 }
+
+// MARK: - Notes ViewController Protocol
 
 extension NotesViewController: NotesViewControllerProtocol {
     func reloadData() {
