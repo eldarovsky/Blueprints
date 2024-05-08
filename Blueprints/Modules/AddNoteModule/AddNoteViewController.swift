@@ -13,6 +13,8 @@ final class AddNoteViewController: UIViewController {
 
     let textView = UITextView()
     var note: Note?
+    weak var addNoteViewControllerCoordinator: AddNoteViewControllerCoordinator?
+
 
     // MARK: - Lifecycle methods
 

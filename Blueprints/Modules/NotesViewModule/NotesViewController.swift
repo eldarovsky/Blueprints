@@ -14,6 +14,7 @@ final class NotesViewController: UIViewController {
     // MARK: - Private properties
 
     private let storageManager = StorageManager.shared
+    weak var notesViewControllerCoordinator: NotesViewControllerCoordinator?
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let footerView = UIView()
@@ -160,8 +161,9 @@ private extension NotesViewController {
 
     /// showAddNote VC method
     @objc private func showAddNoteVC() {
-        let vc = AddNoteViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = AddNoteViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        notesViewControllerCoordinator?.runAddNotes()
     }
 
     /// fetchData method
