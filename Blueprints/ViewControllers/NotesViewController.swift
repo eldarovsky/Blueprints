@@ -35,6 +35,10 @@ final class NotesViewController: UIViewController {
         notesCounterLabel.text = notes.count <= 1 ? "\(notes.count) note" : "\(notes.count) notes"
         tableView.reloadData()
     }
+
+    // MARK: - Private methods
+
+
 }
 
 // MARK: - Notes ViewController extension
@@ -48,6 +52,7 @@ private extension NotesViewController {
         setupNavigationBar()
         setupTableView()
         setupUI()
+
         addActions()
         fetchData()
     }
@@ -134,8 +139,12 @@ private extension NotesViewController {
 
         notesCounterLabel.font = UIFont(name: "system", size: 17)
 
-        addNoteButton.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 17)
+        let image = UIImage(systemName: "square.and.pencil", withConfiguration: config)
+        addNoteButton.setImage(image, for: .normal)
         addNoteButton.tintColor = .black
+        let highlightImage = image?.withTintColor(.gray, renderingMode:.alwaysOriginal)
+        addNoteButton.setImage(highlightImage, for: .highlighted)
     }
 
     /// addActions method
@@ -143,18 +152,19 @@ private extension NotesViewController {
         addNoteButton.addTarget(self, action: #selector(showAddNoteVC), for: .touchUpInside)
     }
 
-    /// showAddNoteVC method
+
+
+
+
+
+
+    /// showAddNote VC method
     @objc private func showAddNoteVC() {
-        navigationController?.pushViewController(AddNoteViewController(), animated: true)
+        let vc = AddNoteViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 
-
-
-
-
-
-
-    ///Метод получения данных из СoreData
+    /// fetchData method
     private func fetchData() {
         storageManager.fetch { [weak self] result in
             guard let self = self else { return }
@@ -165,18 +175,21 @@ private extension NotesViewController {
                 print(error.localizedDescription)
             }
         }
+
         notes.sort { $0.date ?? Date() > $1.date ?? Date() }
     }
 
-    ///Метод форматирования даты и времени
+    /// Date to string method
     private func dateToString(format: String, date: Date?) -> String? {
         guard let date = date else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = format
         let stringData = formatter.string (from: date)
+
         return stringData
     }
 
+    /// Get Image method
     private func getImage(from date: Date?) -> String {
         if let noteDate = date {
             let hour = Calendar.current.component(.hour, from: noteDate)
@@ -199,18 +212,16 @@ private extension NotesViewController {
                 return "8"
             }
         } else {
-            return ""
+            return "1"
         }
     }
 }
 
-// MARK: - Methods Protocols
+// MARK: - UITableView DataSource
 
 extension NotesViewController: UITableViewDataSource {
 
-    // MARK: Table View Data Sourse
-
-    /// Количество строк в секции
+    /// Number Of Rows In Section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         notes.count
     }
@@ -237,7 +248,6 @@ extension NotesViewController: UITableViewDataSource {
 
         let image = getImage(from: note.date)
         content.image = UIImage(named: image)
-        content.image = content.image?.withTintColor(.black)
 
         cell.contentConfiguration = content
 
@@ -245,11 +255,11 @@ extension NotesViewController: UITableViewDataSource {
     }
 }
 
+// MARK: TableView Delegate
+
 extension NotesViewController: UITableViewDelegate {
 
-    // MARK: Table View Delegate
-
-    ///При нажатии на ячейку переходим на экран редактирования и переносим данные
+    /// Note editing method
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = AddNoteViewController()
         vc.note = notes[indexPath.row]
@@ -258,46 +268,21 @@ extension NotesViewController: UITableViewDelegate {
         navigationController?.pushViewController(vc, animated: true)
     }
 
-    ///Метод удаления ячейки свайпом влево
+    /// Note deleting method with notes count update
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let note = notes.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            let note = notes[indexPath.row]
             storageManager.delete(note: note)
-            //            notesCounterLabel.text = notes.count <= 1 ? "\(notes.count) note" : "\(notes.count) notes"
+
+            notes.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+
+            notesCounterLabel.text = notes.count <= 1 ? "\(notes.count) note" : "\(notes.count) notes"
         }
     }
 
+    /// Table View row height method
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         70
     }
 }
-
-
-
-private enum TimeOfDay: String {
-    case morning = "утро"
-    case afternoon = "день"
-    case evening = "вечер"
-    case night = "ночь"
-
-    static func getTimeOfDay() -> TimeOfDay {
-        let date = Date()
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: date)
-
-        switch hour {
-        case 6..<12:
-            return .morning
-        case 12..<18:
-            return .afternoon
-        case 18..<22:
-            return .evening
-        default:
-            return .night
-        }
-    }
-}
-
-
-
