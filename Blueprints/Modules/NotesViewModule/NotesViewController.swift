@@ -9,19 +9,23 @@ import UIKit
 
 // MARK: - Notes ViewController
 
+protocol NotesViewControllerProtocol: AnyObject {
+    func reloadData()
+    func updateNotesCounterLabel()
+    func deleteRow(at index: Int)
+    func showAddNoteView()
+}
+
 final class NotesViewController: UIViewController {
 
     // MARK: - Private properties
-
-    private let storageManager = StorageManager.shared
     weak var notesViewControllerCoordinator: NotesViewControllerCoordinator?
+    var presenter: NotesPresenterProtocol?
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let footerView = UIView()
     private let notesCounterLabel = UILabel()
     private let addNoteButton = UIButton()
-
-    private var notes: [Note] = []
 
     // MARK: - Lifecycle methods
 
@@ -32,14 +36,9 @@ final class NotesViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        fetchData()
-        notesCounterLabel.text = notes.count <= 1 ? "\(notes.count) note" : "\(notes.count) notes"
-        tableView.reloadData()
+        presenter?.fetchData()
+        updateNotesCounterLabel()
     }
-
-    // MARK: - Private methods
-
-
 }
 
 // MARK: - Notes ViewController extension
@@ -55,7 +54,6 @@ private extension NotesViewController {
         setupUI()
 
         addActions()
-        fetchData()
     }
 }
 
@@ -161,24 +159,7 @@ private extension NotesViewController {
 
     /// showAddNote VC method
     @objc private func showAddNoteVC() {
-//        let vc = AddNoteViewController()
-//        navigationController?.pushViewController(vc, animated: true)
         notesViewControllerCoordinator?.runAddNotes()
-    }
-
-    /// fetchData method
-    private func fetchData() {
-        storageManager.fetch { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let notes):
-                self.notes = notes
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-
-        notes.sort { $0.date ?? Date() > $1.date ?? Date() }
     }
 
     /// Date to string method
@@ -225,13 +206,13 @@ extension NotesViewController: UITableViewDataSource {
 
     /// Number Of Rows In Section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        notes.count
+        presenter?.numberOfNotes() ?? 0
     }
 
     /// Настраиваем ячейку
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let note = notes[indexPath.row]
+        guard let note = presenter?.note(at: indexPath) else { return UITableViewCell() }
         let time = dateToString(format: "dd.MM.yy", date: note.date)
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
@@ -264,8 +245,8 @@ extension NotesViewController: UITableViewDelegate {
     /// Note editing method
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = AddNoteViewController()
-        vc.note = notes[indexPath.row]
-        vc.textView.text = notes[indexPath.row].text
+        vc.note = presenter?.note(at: indexPath)
+        vc.textView.text = presenter?.note(at: indexPath).text
 
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -273,18 +254,37 @@ extension NotesViewController: UITableViewDelegate {
     /// Note deleting method with notes count update
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let note = notes[indexPath.row]
-            storageManager.delete(note: note)
 
-            notes.remove(at: indexPath.row)
+            presenter?.deleteNote(at: indexPath)
+
             tableView.deleteRows(at: [indexPath], with: .automatic)
 
-            notesCounterLabel.text = notes.count <= 1 ? "\(notes.count) note" : "\(notes.count) notes"
+            updateNotesCounterLabel()
         }
     }
 
     /// Table View row height method
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         70
+    }
+}
+
+extension NotesViewController: NotesViewControllerProtocol {
+    func reloadData() {
+        tableView.reloadData()
+    }
+
+    func updateNotesCounterLabel() {
+        let notesCount = presenter?.numberOfNotes() ?? 0
+        notesCounterLabel.text = notesCount <= 1 ? "\(notesCount) note" : "\(notesCount) notes"
+    }
+
+    func deleteRow(at index: Int) {
+        let indexPath = IndexPath(row: index, section: 0)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+
+    func showAddNoteView() {
+        presenter?.addNoteButtonTapped()
     }
 }

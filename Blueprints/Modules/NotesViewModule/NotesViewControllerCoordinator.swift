@@ -17,6 +17,11 @@ final class NotesViewControllerCoordinator: BaseCoordinator {
 
     override func start() {
         let notesViewController = NotesViewController()
+        let presenter = NotesPresenter()
+
+        notesViewController.presenter = presenter
+        presenter.view = notesViewController
+
         notesViewController.notesViewControllerCoordinator = self
         navigationController.pushViewController(notesViewController, animated: true)
     }
