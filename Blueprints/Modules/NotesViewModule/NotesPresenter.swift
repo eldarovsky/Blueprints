@@ -33,25 +33,25 @@ extension NotesPresenter: NotesPresenterProtocol {
                 print(error.localizedDescription)
             }
         }
-
+        
         notes.sort { $0.date ?? Date() > $1.date ?? Date() }
     }
-
+    
     func numberOfNotes() -> Int {
         notes.count
     }
-
+    
     func note(at indexPath: IndexPath) -> Note {
         return notes[indexPath.row]
     }
-
+    
     func deleteNote(at indexPath: IndexPath) {
         let note = notes[indexPath.row]
         storageManager.delete(note: note)
-
+        
         notes.remove(at: indexPath.row)
     }
-
+    
     func addNoteButtonTapped() {
         view?.showAddNoteView()
     }

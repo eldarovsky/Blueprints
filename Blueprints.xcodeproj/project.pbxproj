@@ -13,10 +13,10 @@
 		B89F6D362BEB50EC00B0E330 /* NotesViewControllerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F6D352BEB50EC00B0E330 /* NotesViewControllerCoordinator.swift */; };
 		B89F6D382BEB516A00B0E330 /* AddNoteViewControllerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F6D372BEB516A00B0E330 /* AddNoteViewControllerCoordinator.swift */; };
 		B89F6D3C2BEBAC0F00B0E330 /* NotesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F6D3B2BEBAC0F00B0E330 /* NotesPresenter.swift */; };
+		B89F6D442BEBE5C100B0E330 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B89F6D432BEBE5C100B0E330 /* Assets.xcassets */; };
 		B8F5FE3B2BEA30DC00D4F139 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F5FE3A2BEA30DC00D4F139 /* AppDelegate.swift */; };
 		B8F5FE3D2BEA30DC00D4F139 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F5FE3C2BEA30DC00D4F139 /* SceneDelegate.swift */; };
 		B8F5FE3F2BEA30DC00D4F139 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F5FE3E2BEA30DC00D4F139 /* NotesViewController.swift */; };
-		B8F5FE472BEA30DE00D4F139 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8F5FE462BEA30DE00D4F139 /* Assets.xcassets */; };
 		B8F5FE4A2BEA30DE00D4F139 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = B8F5FE492BEA30DE00D4F139 /* Base */; };
 		B8F5FE562BEA3AF700D4F139 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F5FE552BEA3AF700D4F139 /* StorageManager.swift */; };
 		B8F5FE592BEA3D9800D4F139 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F5FE582BEA3D9800D4F139 /* AddNoteViewController.swift */; };
@@ -31,11 +31,11 @@
 		B89F6D352BEB50EC00B0E330 /* NotesViewControllerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewControllerCoordinator.swift; sourceTree = "<group>"; };
 		B89F6D372BEB516A00B0E330 /* AddNoteViewControllerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteViewControllerCoordinator.swift; sourceTree = "<group>"; };
 		B89F6D3B2BEBAC0F00B0E330 /* NotesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesPresenter.swift; sourceTree = "<group>"; };
+		B89F6D432BEBE5C100B0E330 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B8F5FE372BEA30DC00D4F139 /* Blueprints.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blueprints.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8F5FE3A2BEA30DC00D4F139 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B8F5FE3C2BEA30DC00D4F139 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B8F5FE3E2BEA30DC00D4F139 /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
-		B8F5FE462BEA30DE00D4F139 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B8F5FE492BEA30DE00D4F139 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B8F5FE4B2BEA30DE00D4F139 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B8F5FE552BEA3AF700D4F139 /* StorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 		B8F5FE522BEA35B900D4F139 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				B8F5FE462BEA30DE00D4F139 /* Assets.xcassets */,
+				B89F6D432BEBE5C100B0E330 /* Assets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -224,7 +224,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8F5FE472BEA30DE00D4F139 /* Assets.xcassets in Resources */,
+				B89F6D442BEBE5C100B0E330 /* Assets.xcassets in Resources */,
 				B8F5FE4A2BEA30DE00D4F139 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

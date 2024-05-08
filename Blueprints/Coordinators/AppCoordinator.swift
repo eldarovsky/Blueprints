@@ -15,7 +15,7 @@ final class AppCoordinator: BaseCoordinator {
         let navigationController = UINavigationController()
         
         // Здесь можно настроить navigationController
-
+        
         return navigationController
     }()
     
