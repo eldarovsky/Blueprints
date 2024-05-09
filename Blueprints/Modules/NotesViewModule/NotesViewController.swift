@@ -32,7 +32,7 @@ final class NotesViewController: UIViewController {
     private let footerView = UIView()
     private let notesCounterLabel = UILabel()
     private let addNoteButton = UIButton()
-    
+
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
@@ -58,7 +58,8 @@ private extension NotesViewController {
         setupNavigationBar()
         setupTableView()
         setupUI()
-        
+
+
         addActions()
     }
 }
@@ -88,7 +89,7 @@ private extension NotesViewController {
     /// setConstraints method
     func setConstraints() {
         tableView.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
 
         footerView.snp.makeConstraints { make in
@@ -113,6 +114,21 @@ private extension NotesViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.dataSource = self
         tableView.delegate = self
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .white
+        refreshControl.backgroundColor = UIColor(red: 24/255, green: 67/255, blue: 103/255, alpha: 1)
+
+        let attributedTitle = NSAttributedString(
+            string: "Refresh",
+            attributes: [.foregroundColor: UIColor.white]
+        )
+
+        refreshControl.attributedTitle = attributedTitle
+
+
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.refreshControl = refreshControl
     }
     
     /// setupNavigationBar method
@@ -134,7 +150,7 @@ private extension NotesViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Notes", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = .white
     }
-    
+
     /// setupUI method
     func setupUI() {
         tableView.backgroundColor = .systemGray6
@@ -157,9 +173,15 @@ private extension NotesViewController {
     @objc private func showAddNoteVC() {
         notesViewControllerCoordinator?.runAddNotes()
     }
-    
+
+    /// Pull to refresh method
+    @objc private func refreshData() {
+        presenter?.fetchData()
+        tableView.refreshControl?.endRefreshing()
+    }
+
     /// Date to string method
-    func dateToString(format: String, date: Date?) -> String? {
+    func formattedDateString(format: String, date: Date?) -> String? {
         guard let date = date else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = format
@@ -209,7 +231,7 @@ extension NotesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let note = presenter?.note(at: indexPath) else { return UITableViewCell() }
-        let time = dateToString(format: "dd.MM.yyyy", date: note.date)
+        let time = formattedDateString(format: "dd.MM.yyyy", date: note.date)
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.accessoryType = .disclosureIndicator

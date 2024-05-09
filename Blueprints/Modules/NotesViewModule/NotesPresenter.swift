@@ -15,7 +15,7 @@ protocol NotesPresenterProtocol {
     func addNoteButtonTapped()
 }
 
-class NotesPresenter {
+final class NotesPresenter {
     weak var view: NotesViewControllerProtocol?
     private let storageManager = StorageManager.shared
     private var notes: [Note] = []

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5456D6C4AA640056F4096D8C /* Pods_Blueprints.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0795C5C331B4A8CFB94E7FEA /* Pods_Blueprints.framework */; };
+		B86FB8332BECB2740092FE2F /* AddNotePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86FB8322BECB2740092FE2F /* AddNotePresenter.swift */; };
 		B89F6D302BEB505000B0E330 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F6D2C2BEB505000B0E330 /* AppCoordinator.swift */; };
 		B89F6D312BEB505000B0E330 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F6D2D2BEB505000B0E330 /* BaseCoordinator.swift */; };
 		B89F6D322BEB505000B0E330 /* CoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F6D2E2BEB505000B0E330 /* CoordinatorProtocol.swift */; };
@@ -28,6 +29,7 @@
 /* Begin PBXFileReference section */
 		0795C5C331B4A8CFB94E7FEA /* Pods_Blueprints.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Blueprints.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4E2E6B18C2C506EA12BF668 /* Pods-Blueprints.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blueprints.release.xcconfig"; path = "Target Support Files/Pods-Blueprints/Pods-Blueprints.release.xcconfig"; sourceTree = "<group>"; };
+		B86FB8322BECB2740092FE2F /* AddNotePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNotePresenter.swift; sourceTree = "<group>"; };
 		B89F6D2C2BEB505000B0E330 /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		B89F6D2D2BEB505000B0E330 /* BaseCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		B89F6D2E2BEB505000B0E330 /* CoordinatorProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatorProtocol.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				B8F5FE582BEA3D9800D4F139 /* AddNoteViewController.swift */,
+				B86FB8322BECB2740092FE2F /* AddNotePresenter.swift */,
 				B89F6D372BEB516A00B0E330 /* AddNoteViewControllerCoordinator.swift */,
 			);
 			path = AddNoteModule;
@@ -310,6 +313,7 @@
 				B89F6D3C2BEBAC0F00B0E330 /* NotesPresenter.swift in Sources */,
 				B8F5FE3B2BEA30DC00D4F139 /* AppDelegate.swift in Sources */,
 				B8F5FE5E2BEA853200D4F139 /* UIView+.swift in Sources */,
+				B86FB8332BECB2740092FE2F /* AddNotePresenter.swift in Sources */,
 				B8F5FE592BEA3D9800D4F139 /* AddNoteViewController.swift in Sources */,
 				B89F6D302BEB505000B0E330 /* AppCoordinator.swift in Sources */,
 				B8F5FE5C2BEA3F7800D4F139 /* Note.xcdatamodeld in Sources */,

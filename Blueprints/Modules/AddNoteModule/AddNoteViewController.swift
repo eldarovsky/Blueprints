@@ -8,88 +8,107 @@
 import UIKit
 import SnapKit
 
+// MARK: - AddNote ViewController Protocol
+
+protocol AddNoteViewControllerProtocol: AnyObject {}
+
+// MARK: - AddNote ViewController
+
 final class AddNoteViewController: UIViewController {
-    
-    // MARK: - Properties
-    
-    let textView = UITextView()
-    var note: Note?
+
+    // MARK: - Public properties
+
     weak var addNoteViewControllerCoordinator: AddNoteViewControllerCoordinator?
-    
+    var presenter: AddNotePresenterProtocol?
+
+    let textView = UITextView()
+
+    var note: Note?
+
     // MARK: - Lifecycle methods
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+    }
+}
+
+// MARK: - Private methods
+
+private extension AddNoteViewController {
+    func setupView() {
+        addSubviews()
+        disableAutoresizingMask()
+        setConstraints()
+
+
+
         setupProperties()
         setupUI()
-        setupConstraints()
         setColor()
     }
-    
-    // MARK: - Private methods
-    
-    @objc private func saveNote() {
-        let text = textView.text ?? ""
-        let lines = text.components(separatedBy: "\n")
-        guard let title = lines.first else { return }
-        let fullText = lines.joined(separator: " ")
-        guard !fullText.isEmpty else { return }
-        
-        if let existingNote = note {
-            StorageManager.shared.update(note: existingNote, title: title, text: fullText)
-        } else {
-            StorageManager.shared.create(title: title, text: fullText)
-        }
+}
+
+private extension AddNoteViewController {
+    func addSubviews() {
+        view.addSubviews(textView)
     }
 
-    /// Метод настройки view
-    private func setupUI() {
-        
-        title = "New note"
-        view.backgroundColor = .systemGray6
-        
-        let saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveNote))
-        navigationItem.rightBarButtonItem = saveButton
-        
-        view.addSubview(textView)
-        
-        textView.delegate = self
-        
-        textView.translatesAutoresizingMaskIntoConstraints = false
+    func disableAutoresizingMask() {
+        view.disableAutoresizingMask(textView)
     }
-    
-    ///Метод настройки subview
-    private func setupProperties() {
-        
-        ///Выставляем размер шрифта
-        textView.font = UIFont.systemFont(ofSize: 17)
-        
-        ///Меняем цвет курсора
-        textView.tintColor = UIColor(red: 24/255, green: 67/255, blue: 103/255, alpha: 1)
 
-        textView.backgroundColor = .systemGray6
-    }
-    
-    ///Метод установки констрейнтов
-    private func setupConstraints() {
+    func setConstraints() {
         textView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.left.equalToSuperview().offset(8)
             make.right.equalToSuperview().offset(-8)
         }
     }
-    
-    private func setColor() {
+
+
+    func setupUI() {
+        title = "New note"
+        view.backgroundColor = .systemGray6
+
+        let saveButton = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveNote))
+        navigationItem.rightBarButtonItem = saveButton
+
+        view.addSubview(textView)
+
+        textView.delegate = self
+
+        textView.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+
+    @objc func saveNote() {
+        presenter?.save(text: textView.text, ofNote: note)
+    }
+
+
+    ///Метод настройки subview
+    func setupProperties() {
+        textView.font = UIFont.systemFont(ofSize: 17)
+        textView.tintColor = UIColor(red: 24/255, green: 67/255, blue: 103/255, alpha: 1)
+        textView.backgroundColor = .systemGray6
+    }
+
+
+
+    func setColor() {
         guard let saveButton = navigationItem.rightBarButtonItem else { return }
         saveButton.tintColor = !textView.text.isEmpty ? .white : .white.withAlphaComponent(0.5)
         saveButton.isEnabled = !textView.text.isEmpty ? true : false
     }
 }
 
-// MARK: - UITextViewDelegate - Placeholder
+// MARK: - Text ViewDelegate
 
 extension AddNoteViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         setColor()
     }
 }
+
+extension AddNoteViewController: AddNoteViewControllerProtocol {}
