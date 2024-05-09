@@ -2,7 +2,8 @@
 //  AddNotePresenter.swift
 //  Blueprints
 //
-//  Created by Эльдар Абдуллин on 09.05.2024.
+//  Created by Eldar Abdullin on 09.05.2024.
+//  Copyright © 2024 Eldar Abdullin. All rights reserved.
 //
 
 import Foundation
@@ -13,6 +14,7 @@ protocol AddNotePresenterProtocol {
 
 final class AddNotePresenter {
     weak var view: AddNoteViewControllerProtocol?
+    private let storageManager: StorageManagerProtocol = StorageManager()
 }
 
 extension AddNotePresenter: AddNotePresenterProtocol {
@@ -23,9 +25,9 @@ extension AddNotePresenter: AddNotePresenterProtocol {
         guard !fullText.isEmpty else { return }
 
         if let existingNote = note {
-            StorageManager.shared.update(note: existingNote, title: title, text: fullText)
+            storageManager.update(note: existingNote, title: title, text: fullText)
         } else {
-            StorageManager.shared.create(title: title, text: fullText)
+            storageManager.create(title: title, text: fullText)
         }
     }
 }

@@ -2,195 +2,108 @@
 //  NotesViewController.swift
 //  Blueprints
 //
-//  Created by Эльдар Абдуллин on 07.05.2024.
+//  Created by Eldar Abdullin on 07.05.2024.
+//  Copyright © 2024 Eldar Abdullin. All rights reserved.
 //
 
 import UIKit
 import SnapKit
 
-// MARK: - Notes ViewController Protocol
+// MARK: - Notes view controller protocol
 
+/// Protocol defining methods to be implemented by the notes view controller.
 protocol NotesViewControllerProtocol: AnyObject {
+
+    /// Reloads data in the table view.
     func reloadData()
+
+    /// Updates the label displaying the count of notes.
     func updateNotesCounterLabel()
-    func deleteRow(at index: Int)
-    func showAddNoteView()
+
+    /// Deletes a row at the specified index path.
+    /// - Parameter indexPath: The index path of the row to delete.
+    func deleteRow(at indexPath: IndexPath)
 }
 
-// MARK: - Notes ViewController
+// MARK: - Notes view controller
 
+/// View controller responsible for displaying notes.
 final class NotesViewController: UIViewController {
-    
+
     // MARK: - Public properties
 
+    /// Coordinator responsible for navigation from the notes view controller.
     weak var notesViewControllerCoordinator: NotesViewControllerCoordinator?
+
+    /// Presenter for the notes view controller.
     var presenter: NotesPresenterProtocol?
-    
+
     // MARK: - Private properties
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    private let refreshControl = UIRefreshControl()
     private let footerView = UIView()
     private let notesCounterLabel = UILabel()
     private let addNoteButton = UIButton()
 
     // MARK: - Lifecycle methods
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        setupViews()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter?.fetchData()
+        presenter?.fetchNotes()
         updateNotesCounterLabel()
     }
-}
 
-// MARK: - Private methods
+    // MARK: - Private methods
 
-private extension NotesViewController {
-    func setupView() {
+    /// Sets up the views hierarchy and appearance.
+    func setupViews() {
         addSubviews()
         disableAutoresizingMask()
         setConstraints()
-        
+
+        setupView()
         setupNavigationBar()
         setupTableView()
-        setupUI()
-
+        setupRefreshControl()
+        setupAddNoteButton()
 
         addActions()
     }
-}
 
-private extension NotesViewController {
-
-    /// addSubviews method
-    func addSubviews() {
-        view.addSubviews(
-            tableView,
-            footerView,
-            notesCounterLabel,
-            addNoteButton
-        )
-    }
-    
-    /// disableAutoresizingMask method
-    func disableAutoresizingMask() {
-        view.disableAutoresizingMask(
-            tableView,
-            footerView,
-            notesCounterLabel,
-            addNoteButton
-        )
-    }
-    
-    /// setConstraints method
-    func setConstraints() {
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        footerView.snp.makeConstraints { make in
-            make.height.equalTo(70)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-
-        notesCounterLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(footerView.snp.centerX)
-            make.centerY.equalTo(footerView.snp.top).offset(20)
-        }
-
-        addNoteButton.snp.makeConstraints { make in
-            make.width.height.equalTo(40)
-            make.centerY.equalTo(footerView.snp.top).offset(20)
-            make.trailing.equalTo(footerView.snp.trailing).offset(-30)
-        }
-    }
-
-    /// setupTableView method
-    func setupTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.dataSource = self
-        tableView.delegate = self
-
-        let refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .white
-        refreshControl.backgroundColor = UIColor(red: 24/255, green: 67/255, blue: 103/255, alpha: 1)
-
-        let attributedTitle = NSAttributedString(
-            string: "Refresh",
-            attributes: [.foregroundColor: UIColor.white]
-        )
-
-        refreshControl.attributedTitle = attributedTitle
-
-
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-    }
-    
-    /// setupNavigationBar method
-    func setupNavigationBar() {
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        
-        title = "Notes"
-        appearance.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 21)
-        ]
-        
-        appearance.backgroundColor = UIColor(red: 24/255, green: 67/255, blue: 103/255, alpha: 1)
-        guard let navigationBar = navigationController?.navigationBar else { return }
-        navigationBar.standardAppearance = appearance
-        navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
-        
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Notes", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem?.tintColor = .white
-    }
-
-    /// setupUI method
-    func setupUI() {
-        tableView.backgroundColor = .systemGray6
-        footerView.backgroundColor = .systemGray6
-
-        let config = UIImage.SymbolConfiguration(pointSize: 17)
-        let image = UIImage(systemName: "square.and.pencil", withConfiguration: config)
-        addNoteButton.setImage(image, for: .normal)
-        addNoteButton.tintColor = .black
-        let highlightImage = image?.withTintColor(.black.withAlphaComponent(0.5), renderingMode:.alwaysOriginal)
-        addNoteButton.setImage(highlightImage, for: .highlighted)
-    }
-    
-    /// addActions method
-    func addActions() {
-        addNoteButton.addTarget(self, action: #selector(showAddNoteVC), for: .touchUpInside)
-    }
-
-    /// showAddNote VC method
+    /// Shows the add note view controller.
     @objc private func showAddNoteVC() {
         notesViewControllerCoordinator?.runAddNotes()
     }
 
-    /// Pull to refresh method
+    /// Refreshes data by fetching notes from the presenter.
     @objc private func refreshData() {
-        presenter?.fetchData()
+        presenter?.fetchNotes()
         tableView.refreshControl?.endRefreshing()
     }
 
-    /// Date to string method
+    /// Formats date to a string.
+    /// - Parameters:
+    ///   - format: The format string for the date.
+    ///   - date: The date to format.
+    /// - Returns: The formatted date string.
     func formattedDateString(format: String, date: Date?) -> String? {
         guard let date = date else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = format
         let stringData = formatter.string (from: date)
-        
+
         return stringData
     }
-    
-    /// Get Image method
+
+    /// Determines image name based on the hour of the day.
+    /// - Parameter date: The date for which to determine the image.
+    /// - Returns: The image name.
     func getImage(from date: Date?) -> String {
         if let noteDate = date {
             let hour = Calendar.current.component(.hour, from: noteDate)
@@ -218,93 +131,194 @@ private extension NotesViewController {
     }
 }
 
-// MARK: - TableView DataSource
+// MARK: - Setup layout methods
+
+private extension NotesViewController {
+
+    /// Adds subviews to the view hierarchy.
+    func addSubviews() {
+        view.addSubviews(
+            tableView,
+            footerView,
+            notesCounterLabel,
+            addNoteButton
+        )
+    }
+
+    /// Disables autoresizing mask translation for subviews.
+    func disableAutoresizingMask() {
+        view.disableAutoresizingMask(
+            tableView,
+            footerView,
+            notesCounterLabel,
+            addNoteButton
+        )
+    }
+
+    /// Sets up constraints for subviews.
+    func setConstraints() {
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        footerView.snp.makeConstraints { make in
+            make.height.equalTo(70)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+
+        notesCounterLabel.snp.makeConstraints { make in
+            make.centerX.equalTo(footerView.snp.centerX)
+            make.centerY.equalTo(footerView.snp.top).offset(20)
+        }
+
+        addNoteButton.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.centerY.equalTo(footerView.snp.top).offset(20)
+            make.trailing.equalTo(footerView.snp.trailing).offset(-30)
+        }
+    }
+}
+
+// MARK: - Setup views methods
+
+private extension NotesViewController {
+
+    /// Sets up appearance of the view.
+    func setupView() {
+        tableView.backgroundColor = .systemGray6
+        footerView.backgroundColor = .systemGray6
+    }
+
+    /// Sets up appearance of the navigation bar.
+    func setupNavigationBar() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+
+        title = TextConstants.notesTitle
+        appearance.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 21)
+        ]
+
+        appearance.backgroundColor = .customBlue
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        navigationBar.standardAppearance = appearance
+        navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
+
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: TextConstants.backButtonTitle, style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = .white
+    }
+
+    /// Sets up the table view.
+    func setupTableView() {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.dataSource = self
+        tableView.delegate = self
+
+        tableView.refreshControl = refreshControl
+    }
+
+    /// Sets up the refresh control.
+    func setupRefreshControl() {
+        refreshControl.tintColor = .white
+        refreshControl.backgroundColor = .customBlue
+
+        let attributedTitle = NSAttributedString(
+            string: TextConstants.refreshTitle,
+            attributes: [.foregroundColor: UIColor.white]
+        )
+
+        refreshControl.attributedTitle = attributedTitle
+    }
+
+    /// Sets up the add note button appearance and actions.
+    func setupAddNoteButton() {
+        let config = UIImage.SymbolConfiguration(pointSize: 17)
+        let image = UIImage(systemName: TextConstants.addNoteButtonImageName, withConfiguration: config)
+        addNoteButton.setImage(image, for: .normal)
+        addNoteButton.tintColor = .black
+        let highlightImage = image?.withTintColor(.black.withAlphaComponent(0.5), renderingMode:.alwaysOriginal)
+        addNoteButton.setImage(highlightImage, for: .highlighted)
+    }
+
+    /// Adds actions for buttons.
+    func addActions() {
+        addNoteButton.addTarget(self, action: #selector(showAddNoteVC), for: .touchUpInside)
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+    }
+}
+
+// MARK: - TableView data source methods
 
 extension NotesViewController: UITableViewDataSource {
-    
-    /// Number Of Rows In Section
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         presenter?.numberOfNotes() ?? 0
     }
-    
-    /// Настраиваем ячейку
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+
         guard let note = presenter?.note(at: indexPath) else { return UITableViewCell() }
         let time = formattedDateString(format: "dd.MM.yyyy", date: note.date)
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = .white
-        
+
         var content = cell.defaultContentConfiguration()
-        
+
         content.text = note.title
         content.textProperties.numberOfLines = 1
         content.textProperties.font = .boldSystemFont(ofSize: 17)
-        
+
         content.secondaryText = "\(time ?? "")  \(note.text ?? "")"
         content.secondaryTextProperties.numberOfLines = 1
         content.secondaryTextProperties.color = .gray
-        
+
         let image = getImage(from: note.date)
         content.image = UIImage(named: image)
-        
+
         cell.contentConfiguration = content
-        
+
         return cell
     }
 }
 
-// MARK: - TableView Delegate
+// MARK: - TableView delegate methods
 
 extension NotesViewController: UITableViewDelegate {
-    
-    /// Note editing method
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = AddNoteViewController()
-        vc.note = presenter?.note(at: indexPath)
-        vc.textView.text = presenter?.note(at: indexPath).text
-        
+        guard let note = presenter?.note(at: indexPath) else { return }
+        let vc = AddNoteViewController(note: note)
+
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    /// Note deleting method with notes count update
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
             presenter?.deleteNote(at: indexPath)
-            
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            
             updateNotesCounterLabel()
         }
     }
-    
-    /// Table View row height method
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         70
     }
 }
 
-// MARK: - Notes ViewController Protocol
+// MARK: - Notes view controller protocol methods
 
 extension NotesViewController: NotesViewControllerProtocol {
     func reloadData() {
         tableView.reloadData()
     }
-    
+
     func updateNotesCounterLabel() {
-        let notesCount = presenter?.numberOfNotes() ?? 0
-        notesCounterLabel.text = notesCount <= 1 ? "\(notesCount) note" : "\(notesCount) notes"
+        notesCounterLabel.text = presenter?.updateNotesCounterLabel()
     }
-    
-    func deleteRow(at index: Int) {
-        let indexPath = IndexPath(row: index, section: 0)
+
+    func deleteRow(at indexPath: IndexPath) {
         tableView.deleteRows(at: [indexPath], with: .automatic)
-    }
-    
-    func showAddNoteView() {
-        presenter?.addNoteButtonTapped()
     }
 }

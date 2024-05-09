@@ -2,7 +2,8 @@
 //  AddNoteViewController.swift
 //  Blueprints
 //
-//  Created by Эльдар Абдуллин on 07.05.2024.
+//  Created by Eldar Abdullin on 07.05.2024.
+//  Copyright © 2024 Eldar Abdullin. All rights reserved.
 //
 
 import UIKit
@@ -21,7 +22,7 @@ final class AddNoteViewController: UIViewController {
     weak var addNoteViewControllerCoordinator: AddNoteViewControllerCoordinator?
     var presenter: AddNotePresenterProtocol?
 
-    let textView = UITextView()
+    private let textView = UITextView()
 
     var note: Note?
 
@@ -30,6 +31,15 @@ final class AddNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+    }
+
+    init(note: Note? = nil) {
+        self.note = note
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -68,6 +78,8 @@ private extension AddNoteViewController {
 
 
     func setupUI() {
+        textView.text = note?.text
+
         title = "New note"
         view.backgroundColor = .systemGray6
 
@@ -90,7 +102,7 @@ private extension AddNoteViewController {
     ///Метод настройки subview
     func setupProperties() {
         textView.font = UIFont.systemFont(ofSize: 17)
-        textView.tintColor = UIColor(red: 24/255, green: 67/255, blue: 103/255, alpha: 1)
+        textView.tintColor = .customBlue
         textView.backgroundColor = .systemGray6
     }
 
