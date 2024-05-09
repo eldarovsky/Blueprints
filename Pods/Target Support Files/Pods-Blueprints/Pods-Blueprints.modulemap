@@ -1,0 +1,6 @@
+framework module Pods_Blueprints {
+  umbrella header "Pods-Blueprints-umbrella.h"
+
+  export *
+  module * { export * }
+}
