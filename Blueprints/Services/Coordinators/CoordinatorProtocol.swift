@@ -12,10 +12,10 @@ import Foundation
 
 /// Protocol defining methods and properties required for a coordinator.
 protocol CoordinatorProtocol: AnyObject {
-
+    
     /// An array containing child coordinators.
     var childCoordinators: [CoordinatorProtocol] { get set }
-
+    
     /// Starts the coordinator's navigation flow.
     func start ()
 }
@@ -23,7 +23,7 @@ protocol CoordinatorProtocol: AnyObject {
 // MARK: - Coordinator protocol extension
 
 extension CoordinatorProtocol {
-
+    
     /// Adds a child coordinator to the list of child coordinators.
     /// - Parameter coordinator: The coordinator to be added.
     func add(coordinator: CoordinatorProtocol) {

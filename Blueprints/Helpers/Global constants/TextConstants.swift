@@ -6,10 +6,19 @@
 //  Copyright © 2024 Eldar Abdullin. All rights reserved.
 //
 
-enum TextConstants {
-    static let notesTitle = "Notes"
-    static let backButtonTitle = "Notes"
-    static let refreshTitle = "Refresh"
-    static let addNoteButtonImageName = "square.and.pencil"
-}
+// MARK: - Text Constants
 
+enum TextConstants {
+    
+    // MARK: Notes module
+    
+    static let notesTitle = "Notes"
+    static let refreshTitle = "Refresh"
+    static let noteButtonImageName = "square.and.pencil"
+    
+    // MARK: Note module
+    
+    static let noteTitle = "New note"
+    static let backButtonTitle = "Back"
+    static let saveButtonTitle = "Save"
+}

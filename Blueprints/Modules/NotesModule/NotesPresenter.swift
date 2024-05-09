@@ -12,23 +12,23 @@ import Foundation
 
 /// Protocol defining methods to be implemented by the notes presenter.
 protocol NotesPresenterProtocol {
-
+    
     /// Fetches notes from the storage manager.
     func fetchNotes()
-
+    
     /// Returns the number of notes.
     /// - Returns: The number of notes.
     func numberOfNotes() -> Int
-
+    
     /// Returns the note at the specified index path.
     /// - Parameter indexPath: The index path of the note.
     /// - Returns: The note at the specified index path.
     func note(at indexPath: IndexPath) -> Note
-
+    
     /// Deletes the note at the specified index path.
     /// - Parameter indexPath: The index path of the note to delete.
     func deleteNote(at indexPath: IndexPath)
-
+    
     /// Updates the label displaying the count of notes.
     /// - Returns: The text to display on the label.
     func updateNotesCounterLabel() -> String
@@ -38,17 +38,17 @@ protocol NotesPresenterProtocol {
 
 /// Presenter responsible for managing notes.
 final class NotesPresenter {
-
+    
     // MARK: - Public properties
-
+    
     /// View associated with the presenter.
     weak var view: NotesViewControllerProtocol?
-
+    
     // MARK: - Private properties
-
+    
     /// Storage manager for managing notes data.
     private let storageManager: StorageManagerProtocol = StorageManager()
-
+    
     /// Array containing the notes.
     private var notes: [Note] = []
 }
@@ -68,7 +68,7 @@ extension NotesPresenter: NotesPresenterProtocol {
             }
         }
     }
-
+    
     func numberOfNotes() -> Int {
         notes.count
     }
@@ -76,15 +76,15 @@ extension NotesPresenter: NotesPresenterProtocol {
     func note(at indexPath: IndexPath) -> Note {
         notes[indexPath.row]
     }
-
+    
     func deleteNote(at indexPath: IndexPath) {
         let note = notes[indexPath.row]
         storageManager.delete(note: note)
-
+        
         notes.remove(at: indexPath.row)
         view?.deleteRow(at: indexPath)
     }
-
+    
     func updateNotesCounterLabel() -> String {
         if notes.count <= 1 {
             return "\(notes.count) note"
