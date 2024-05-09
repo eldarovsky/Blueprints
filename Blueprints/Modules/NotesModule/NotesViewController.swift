@@ -259,19 +259,19 @@ extension NotesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let note = presenter?.note(at: indexPath) else { return UITableViewCell() }
-        let time = formattedDateString(format: "dd.MM.yyyy", date: note.date)
-        
+        let time = formattedDateString(format: "HH:mm - dd.MM.yyyy", date: note.date)
+
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = .white
         
         var content = cell.defaultContentConfiguration()
         
-        content.text = note.title
+        content.text = note.text
         content.textProperties.numberOfLines = 1
         content.textProperties.font = .boldSystemFont(ofSize: 17)
         
-        content.secondaryText = "\(time ?? "")  \(note.text ?? "")"
+        content.secondaryText = "\(time ?? "")"
         content.secondaryTextProperties.numberOfLines = 1
         content.secondaryTextProperties.color = .gray
         
