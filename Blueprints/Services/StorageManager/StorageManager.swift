@@ -17,7 +17,7 @@ protocol StorageManagerProtocol {
     /// - Parameters:
     ///   - title: The title of the note.
     ///   - text: The text content of the note.
-    func create(title: String, text: String?)
+    func create(text: String?)
     
     /// Fetches all notes from the storage.
     /// - Parameter completion: Completion block returning a result with an array of notes or an error.
@@ -28,8 +28,8 @@ protocol StorageManagerProtocol {
     ///   - note: The note to be updated.
     ///   - title: The new title for the note.
     ///   - text: The new text content for the note.
-    func update(note: Note, title: String, text: String?)
-    
+    func update(text: String?, ofNote note: Note)
+
     /// Deletes the given note from the storage.
     /// - Parameter note: The note to be deleted.
     func delete(note: Note)
@@ -69,11 +69,10 @@ final class StorageManager {
 
 extension StorageManager: StorageManagerProtocol {
     
-    func create(title: String, text: String?) {
+    func create(text: String?) {
         let note = Note(context: viewContext)
         note.id = UUID()
         note.date = Date()
-        note.title = title
         note.text = text
         saveContext()
     }
@@ -89,9 +88,8 @@ extension StorageManager: StorageManagerProtocol {
         }
     }
     
-    func update(note: Note, title: String, text: String?) {
+    func update(text: String?, ofNote note: Note) {
         note.date = Date()
-        note.title = title
         note.text = text
         saveContext()
     }

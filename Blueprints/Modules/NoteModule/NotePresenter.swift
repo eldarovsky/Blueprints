@@ -40,15 +40,10 @@ final class NotePresenter {
 
 extension NotePresenter: NotePresenterProtocol {
     func save(text: String, ofNote note: Note?) {
-        let lines = text.components(separatedBy: "\n")
-        guard let title = lines.first else { return }
-        let fullText = lines.joined(separator: " ")
-        guard !fullText.isEmpty else { return }
-        
         if let existingNote = note {
-            storageManager.update(note: existingNote, title: title, text: fullText)
+            storageManager.update(text: text, ofNote: existingNote)
         } else {
-            storageManager.create(title: title, text: fullText)
+            storageManager.create(text: text)
         }
     }
 }
