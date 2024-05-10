@@ -47,8 +47,8 @@ final class NotesPresenter {
     // MARK: - Private properties
     
     /// Storage manager for managing notes data.
-    private let storageManager: StorageManagerProtocol = StorageManager()
-    
+    private let storageManager = StorageManager.shared
+
     /// Array containing the notes.
     private var notes: [Note] = []
 }

@@ -16,7 +16,7 @@ protocol NotePresenterProtocol {
     /// Saves the text of the note.
     /// - Parameters:
     ///   - text: The text content of the note.
-    ///   - note: The note object to be updated. If `nil`, a new note will be created.
+    ///   - note: The note object to be updated. If nil, a new note will be created.
     func save(text: String, ofNote: Note?)
 }
 
@@ -33,7 +33,7 @@ final class NotePresenter {
     // MARK: - Private properties
     
     /// Storage manager for managing notes data.
-    private let storageManager: StorageManagerProtocol = StorageManager()
+    private let storageManager = StorageManager.shared
 }
 
 // MARK: - Note presenter protocol methods

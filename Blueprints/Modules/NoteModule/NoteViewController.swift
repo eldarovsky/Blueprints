@@ -40,6 +40,10 @@ final class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+
+        let presenter = NotePresenter()
+        self.presenter = presenter
+        presenter.view = self
     }
     
     // MARK: - Initializers

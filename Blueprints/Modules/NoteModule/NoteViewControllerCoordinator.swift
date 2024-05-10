@@ -31,10 +31,10 @@ final class NoteViewControllerCoordinator: BaseCoordinator {
     /// Starts the coordinator and presents the note view controller.
     override func start() {
         let noteViewController = NoteViewController()
-        let presenter = NotePresenter()
-        
-        noteViewController.presenter = presenter
-        presenter.view = noteViewController
+//        let presenter = NotePresenter()
+//        
+//        noteViewController.presenter = presenter
+//        presenter.view = noteViewController
         
         noteViewController.noteViewControllerCoordinator = self
         navigationController.pushViewController(noteViewController, animated: true)
