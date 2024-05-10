@@ -13,7 +13,7 @@ enum TextConstants {
     // MARK: Notes module
     
     static let notesTitle = "Notes"
-    static let refreshTitle = "Refresh"
+    static let refreshTitle = ""
     static let noteButtonImageName = "square.and.pencil"
     
     // MARK: Note module
