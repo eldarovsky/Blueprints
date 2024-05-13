@@ -96,7 +96,7 @@ final class NotesViewController: UIViewController {
         guard let date = date else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = format
-        let stringData = formatter.string (from: date)
+        let stringData = formatter.string(from: date)
         
         return stringData
     }
@@ -205,7 +205,13 @@ private extension NotesViewController {
         navigationBar.standardAppearance = appearance
         navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
         
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: TextConstants.backButtonTitle, style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = UIBarButtonItem(
+            title: TextConstants.backButtonTitle,
+            style: .plain,
+            target: nil,
+            action: nil
+        )
+        
         navigationItem.backBarButtonItem?.tintColor = .white
     }
     
@@ -237,7 +243,7 @@ private extension NotesViewController {
         let image = UIImage(systemName: TextConstants.noteButtonImageName, withConfiguration: config)
         noteButton.setImage(image, for: .normal)
         noteButton.tintColor = .black
-        let highlightImage = image?.withTintColor(.black.withAlphaComponent(0.5), renderingMode:.alwaysOriginal)
+        let highlightImage = image?.withTintColor(.black.withAlphaComponent(0.5), renderingMode: .alwaysOriginal)
         noteButton.setImage(highlightImage, for: .highlighted)
     }
     
@@ -295,7 +301,11 @@ extension NotesViewController: UITableViewDelegate {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
         if editingStyle == .delete {
             presenter?.deleteNote(at: indexPath)
             updateNotesCounterLabel()

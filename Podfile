@@ -8,5 +8,6 @@ target 'Blueprints' do
   # Pods for Blueprints
 
 pod 'SnapKit'
+pod 'SwiftLint'
 
 end

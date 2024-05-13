@@ -27,7 +27,7 @@ extension CoordinatorProtocol {
     /// Adds a child coordinator to the list of child coordinators.
     /// - Parameter coordinator: The coordinator to be added.
     func add(coordinator: CoordinatorProtocol) {
-        childCoordinators.append (coordinator)
+        childCoordinators.append(coordinator)
     }
     
     /// Removes a child coordinator from the list of child coordinators.
