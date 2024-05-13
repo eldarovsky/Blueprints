@@ -125,7 +125,14 @@ private extension NoteViewController {
     
     /// Sets up the save button in the navigation bar.
     func setupSaveButton() {
-        let saveButton = UIBarButtonItem(title: TextConstants.saveButtonTitle, style: .done, target: self, action: #selector(saveNote))
+        let saveButton = UIBarButtonItem(
+            title: TextConstants.saveButtonTitle,
+            style: .done,
+            target: self,
+            action: #selector(
+                saveNote
+            )
+        )
         navigationItem.rightBarButtonItem = saveButton
     }
     
