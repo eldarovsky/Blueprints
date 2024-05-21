@@ -17,24 +17,29 @@ final class NoteViewControllerCoordinator: BaseCoordinator {
     
     /// Navigation controller used for navigation.
     private var navigationController: UINavigationController
-    
+
+    /// The note to display/edit.
+    private let note: Note?
+
     // MARK: - Initializers
     
     /// Initializes the coordinator with the given navigation controller.
     /// - Parameter navigationController: The navigation controller used for navigation.
-    init(navigationController: UINavigationController) {
+    /// - Parameter note: The note to display/edit.
+    init(navigationController: UINavigationController, note: Note?) {
         self.navigationController = navigationController
+        self.note = note
     }
     
     // MARK: - Public methods
     
     /// Starts the coordinator and presents the note view controller.
     override func start() {
-        let noteViewController = NoteViewController()
-//        let presenter = NotePresenter()
-//        
-//        noteViewController.presenter = presenter
-//        presenter.view = noteViewController
+        let noteViewController = NoteViewController(note: note)
+        let presenter = NotePresenter()
+        
+        noteViewController.presenter = presenter
+        presenter.view = noteViewController
         
         noteViewController.noteViewControllerCoordinator = self
         navigationController.pushViewController(noteViewController, animated: true)

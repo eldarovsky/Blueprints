@@ -111,9 +111,9 @@
 		B89F6D2F2BEB505000B0E330 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				B89F6D2C2BEB505000B0E330 /* AppCoordinator.swift */,
-				B89F6D2D2BEB505000B0E330 /* BaseCoordinator.swift */,
 				B89F6D2E2BEB505000B0E330 /* CoordinatorProtocol.swift */,
+				B89F6D2D2BEB505000B0E330 /* BaseCoordinator.swift */,
+				B89F6D2C2BEB505000B0E330 /* AppCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";

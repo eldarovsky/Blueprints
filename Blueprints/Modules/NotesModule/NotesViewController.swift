@@ -37,7 +37,7 @@ final class NotesViewController: UIViewController {
     
     /// Presenter for the notes view controller.
     var presenter: NotesPresenterProtocol?
-    
+
     // MARK: - Private properties
     
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -45,7 +45,7 @@ final class NotesViewController: UIViewController {
     private let footerView = UIView()
     private let notesCounterLabel = UILabel()
     private let noteButton = UIButton()
-    
+
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
@@ -296,9 +296,7 @@ extension NotesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let note = presenter?.note(at: indexPath) else { return }
-        let vc = NoteViewController(note: note)
-        
-        navigationController?.pushViewController(vc, animated: true)
+        notesViewControllerCoordinator?.runNote(note: note)
     }
     
     func tableView(

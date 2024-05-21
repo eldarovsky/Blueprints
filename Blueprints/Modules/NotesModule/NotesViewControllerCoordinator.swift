@@ -17,7 +17,7 @@ final class NotesViewControllerCoordinator: BaseCoordinator {
     
     /// Navigation controller used for navigation.
     private var navigationController: UINavigationController
-    
+
     // MARK: - Initializers
     
     /// Initializes the coordinator with the given navigation controller.
@@ -41,8 +41,12 @@ final class NotesViewControllerCoordinator: BaseCoordinator {
     }
     
     /// Initiates the coordinator for adding notes.
-    func runNote() {
-        let noteViewControllerCoordinator = NoteViewControllerCoordinator(navigationController: navigationController)
+    func runNote(note: Note? = nil) {
+        let noteViewControllerCoordinator = NoteViewControllerCoordinator(
+            navigationController: navigationController,
+            note: note
+        )
+        
         add(coordinator: noteViewControllerCoordinator)
         noteViewControllerCoordinator.start()
     }

@@ -26,31 +26,27 @@ final class NoteViewController: UIViewController {
     
     /// Presenter for the note view controller.
     var presenter: NotePresenterProtocol?
-    
-    /// The note to display/edit.
-    var note: Note?
-    
+
     // MARK: - Private properties
     
     /// Text view for displaying/editing the note text.
     private let textView = UITextView()
-    
+
+    /// The note to display/edit.
+    private let note: Note?
+
     // MARK: - Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-
-        let presenter = NotePresenter()
-        self.presenter = presenter
-        presenter.view = self
     }
     
     // MARK: - Initializers
     
     /// Initializes the note view controller with a note.
     /// - Parameter note: The note to display/edit.
-    init(note: Note? = nil) {
+    init(note: Note?) {
         self.note = note
         super.init(nibName: nil, bundle: nil)
     }
