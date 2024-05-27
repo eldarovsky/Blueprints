@@ -42,6 +42,8 @@ final class NotesViewControllerCoordinator: BaseCoordinator {
     
     /// Initiates the coordinator for adding notes.
     func runNote(note: Note? = nil) {
+        removeAllChildCoordinators()
+        
         let noteViewControllerCoordinator = NoteViewControllerCoordinator(
             navigationController: navigationController,
             note: note
