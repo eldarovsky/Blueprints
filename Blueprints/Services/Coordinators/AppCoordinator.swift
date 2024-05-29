@@ -19,7 +19,7 @@ final class AppCoordinator: BaseCoordinator {
     private var window: UIWindow
     
     /// The navigation controller managing the app's navigation stack.
-    private var navigationController = UINavigationController()
+    private let navigationController = UINavigationController()
     
     // MARK: - Initializers
     

@@ -16,7 +16,7 @@ final class NoteViewControllerCoordinator: BaseCoordinator {
     // MARK: - Private properties
     
     /// Navigation controller used for navigation.
-    private var navigationController: UINavigationController
+    private let navigationController: UINavigationController
 
     /// The note to display/edit.
     private let note: Note?
