@@ -34,9 +34,7 @@ final class NoteViewControllerCoordinator: BaseCoordinator {
     // MARK: - Public methods
     
     /// Starts the coordinator and presents the note view controller.
-    override func start() {
-        removeAllChildCoordinators()
-        
+    override func start() {        
         let noteViewController = NoteViewController(note: note)
         let presenter = NotePresenter()
         
