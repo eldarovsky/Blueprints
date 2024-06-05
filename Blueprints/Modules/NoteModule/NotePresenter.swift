@@ -34,6 +34,22 @@ final class NotePresenter {
     
     /// Storage manager for managing notes data.
     private let storageManager = StorageManager.shared
+
+    // MARK: - Private methods
+
+    /// Fetches a new note to avoid creating multiple duplicates.
+    private func fetchNote() {
+        storageManager.fetch { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let notes):
+                guard let note = notes.last else { return }
+                view?.save(note: note)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 
 // MARK: - Note presenter protocol methods
@@ -44,6 +60,7 @@ extension NotePresenter: NotePresenterProtocol {
             storageManager.update(text: text, ofNote: existingNote)
         } else {
             storageManager.create(text: text)
+            fetchNote()
         }
     }
 }

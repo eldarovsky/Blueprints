@@ -12,7 +12,11 @@ import SnapKit
 // MARK: - Note view controller protocol
 
 /// Protocol defining methods to be implemented by the note view controller.
-protocol NoteViewControllerProtocol: AnyObject {}
+protocol NoteViewControllerProtocol: AnyObject {
+
+    /// Saves current new note.
+    func save(note: Note)
+}
 
 // MARK: - Note view controller
 
@@ -33,7 +37,7 @@ final class NoteViewController: UIViewController {
     private let textView = UITextView()
 
     /// The note to display/edit.
-    private let note: Note?
+    private var note: Note?
 
     // MARK: - Lifecycle methods
     
@@ -41,7 +45,11 @@ final class NoteViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
     }
-    
+
+    override func viewDidDisappear(_ animated: Bool) {
+        finish()
+    }
+
     // MARK: - Initializers
     
     /// Initializes the note view controller with a note.
@@ -58,7 +66,7 @@ final class NoteViewController: UIViewController {
     // MARK: - Private methods
     
     /// Sets up the view hierarchy and appearance.
-    func setupViews() {
+    private func setupViews() {
         addSubviews()
         disableAutoresizingMask()
         setConstraints()
@@ -70,8 +78,13 @@ final class NoteViewController: UIViewController {
     }
     
     /// Saves the note when the save button is tapped.
-    @objc func saveNote() {
+    @objc private func saveNote() {
         presenter?.save(text: textView.text, ofNote: note)
+    }
+
+    /// Removes map coordinator from array of coordinators
+    private func finish() {
+        noteViewControllerCoordinator?.finish()
     }
 }
 
@@ -152,4 +165,8 @@ extension NoteViewController: UITextViewDelegate {
 
 // MARK: - Note view controller protocol methods
 
-extension NoteViewController: NoteViewControllerProtocol {}
+extension NoteViewController: NoteViewControllerProtocol {
+    func save(note: Note) {
+        self.note = note
+    }
+}

@@ -208,8 +208,8 @@
 		B8F5FE572BEA3B0600D4F139 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				B86FB8362BECF8890092FE2F /* StorageManager */,
 				B89F6D2F2BEB505000B0E330 /* Coordinators */,
+				B86FB8362BECF8890092FE2F /* StorageManager */,
 			);
 			path = Services;
 			sourceTree = "<group>";
