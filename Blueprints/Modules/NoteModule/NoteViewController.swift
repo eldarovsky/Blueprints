@@ -12,7 +12,11 @@ import SnapKit
 // MARK: - Note view controller protocol
 
 /// Protocol defining methods to be implemented by the note view controller.
-protocol NoteViewControllerProtocol: AnyObject {}
+protocol NoteViewControllerProtocol: AnyObject {
+
+    /// Saves current new note.
+    func save(note: Note)
+}
 
 // MARK: - Note view controller
 
@@ -33,7 +37,7 @@ final class NoteViewController: UIViewController {
     private let textView = UITextView()
 
     /// The note to display/edit.
-    private let note: Note?
+    private var note: Note?
 
     // MARK: - Lifecycle methods
     
@@ -161,4 +165,8 @@ extension NoteViewController: UITextViewDelegate {
 
 // MARK: - Note view controller protocol methods
 
-extension NoteViewController: NoteViewControllerProtocol {}
+extension NoteViewController: NoteViewControllerProtocol {
+    func save(note: Note) {
+        self.note = note
+    }
+}
