@@ -41,7 +41,11 @@ final class NoteViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
     }
-    
+
+    override func viewDidDisappear(_ animated: Bool) {
+        finish()
+    }
+
     // MARK: - Initializers
     
     /// Initializes the note view controller with a note.
@@ -58,7 +62,7 @@ final class NoteViewController: UIViewController {
     // MARK: - Private methods
     
     /// Sets up the view hierarchy and appearance.
-    func setupViews() {
+    private func setupViews() {
         addSubviews()
         disableAutoresizingMask()
         setConstraints()
@@ -70,8 +74,13 @@ final class NoteViewController: UIViewController {
     }
     
     /// Saves the note when the save button is tapped.
-    @objc func saveNote() {
+    @objc private func saveNote() {
         presenter?.save(text: textView.text, ofNote: note)
+    }
+
+    /// Removes map coordinator from array of coordinators
+    private func finish() {
+        noteViewControllerCoordinator?.finish()
     }
 }
 

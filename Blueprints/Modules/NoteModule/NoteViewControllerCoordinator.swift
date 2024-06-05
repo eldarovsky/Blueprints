@@ -8,6 +8,14 @@
 
 import UIKit
 
+// MARK: - Note view controller coordinator protocol
+
+protocol NoteViewControllerCoordinatorProtocol {
+
+    /// Removes map coordinator from array of coordinators
+    func finish()
+}
+
 // MARK: - Note view controller coordinator
 
 /// Coordinator responsible for managing the navigation flow from the note view controller.
@@ -43,5 +51,11 @@ final class NoteViewControllerCoordinator: BaseCoordinator {
         
         noteViewController.noteViewControllerCoordinator = self
         navigationController.pushViewController(noteViewController, animated: true)
+    }
+}
+
+extension NoteViewControllerCoordinator: NoteViewControllerCoordinatorProtocol {
+    func finish() {
+        remove(coordinator: self)
     }
 }

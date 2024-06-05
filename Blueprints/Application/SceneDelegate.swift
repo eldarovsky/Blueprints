@@ -11,7 +11,7 @@ import UIKit
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    var appCoordinator: AppCoordinator?
+    private var appCoordinator: AppCoordinator?
 
     func scene(
         _ scene: UIScene,

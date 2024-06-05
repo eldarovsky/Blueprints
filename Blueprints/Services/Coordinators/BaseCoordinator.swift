@@ -24,9 +24,4 @@ class BaseCoordinator: CoordinatorProtocol {
     func start() {
         fatalError("Child should implement func Start")
     }
-
-    /// Removes all child coordinators from the list.
-    func removeAllChildCoordinators() {
-        childCoordinators.removeAll()
-    }
 }

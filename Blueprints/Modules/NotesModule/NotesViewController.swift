@@ -62,7 +62,7 @@ final class NotesViewController: UIViewController {
     // MARK: - Private methods
     
     /// Sets up the views hierarchy and appearance.
-    func setupViews() {
+    private func setupViews() {
         addSubviews()
         disableAutoresizingMask()
         setConstraints()
@@ -92,7 +92,7 @@ final class NotesViewController: UIViewController {
     ///   - format: The format string for the date.
     ///   - date: The date to format.
     /// - Returns: The formatted date string.
-    func formattedDateString(format: String, date: Date?) -> String? {
+    private func formattedDateString(format: String, date: Date?) -> String? {
         guard let date = date else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = format
@@ -104,7 +104,7 @@ final class NotesViewController: UIViewController {
     /// Determines image name based on the hour of the day.
     /// - Parameter date: The date for which to determine the image.
     /// - Returns: The image name.
-    func getImage(from date: Date?) -> String {
+    private func getImage(from date: Date?) -> String {
         if let noteDate = date {
             let hour = Calendar.current.component(.hour, from: noteDate)
             switch hour {
